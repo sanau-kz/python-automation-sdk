@@ -19,4 +19,4 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/sanau-kz/python-automation-sdk"
-#Issues = "https://github.com/pypa/sampleproject/issues"
+Issues = "https://github.com/sanau-kz/python-automation-sdk/issues"
