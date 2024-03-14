@@ -1,9 +1,15 @@
 from Base import Base
-from Urls import Urls
+from Api import Api
+from Client import Client
+from FileVault import FileVault
+from OGD import OGD
 
 
 class SanauAutomationSDK(Base):
 
-    def __init__(self, region, domain):
-        super().__init__(region, domain)
-        self.urls = Urls(region, domain)
+    def __init__(self, region, domain, access_key):
+        super().__init__(region, domain, access_key)
+        self.api = Api(region, domain, access_key)
+        self.client = Client(region, domain, access_key)
+        self.file_vault = FileVault(region, domain, access_key)
+        self.ogd = OGD(region, domain, access_key)
