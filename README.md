@@ -24,8 +24,6 @@ Thanks to this library, you only have to write the functions you need without wr
 - domain - domain of outsourcing
 - access_key - access_key for outsourcing API
 
-#
-
 SanauAutomationSDK has several classes:
 - **Api**
 - **Client**
@@ -34,16 +32,12 @@ SanauAutomationSDK has several classes:
 
 And each of these classes has functions for working with APIs specific to them
 
-###
-
 > **<font color="#85C1E9">Api</font> class** provides work with APIs that are in no way related to specific outsourcing
 
 | Method                              | Explanation                          |
 |-------------------------------------|--------------------------------------|
 | `get_currency_rates(currency_date)` | gets currency rates at specific date |
 | ``get_domains()``                   | gets all sanau domains               |
-
-##
 
 > **<font color="#85C1E9">Client</font> class** provides work with APIs that are in no way related to specific outsourcing
 
@@ -56,16 +50,11 @@ And each of these classes has functions for working with APIs specific to them
 | ``resole_alert(params)``                | deletes specific alert                       |
 | ``resolve_all_alerts(entity_id, keys)`` | deletes all alerts of specific database      |
 
-
-##
-
 > **<font color="#85C1E9">FileVault</font> class** provides work with file vault
 
 | Method               | Explanation                        |
 |----------------------|------------------------------------|
 | ``get_file(params)`` | gets specific file from file vault |
-
-##
 
 > **<font color="#85C1E9">OGD</font> class** provides work with OGD
 
