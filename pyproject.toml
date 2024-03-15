@@ -10,7 +10,7 @@ authors = [
     { name="NotFakeL1eN", email="notfakel1en@gmail.com" },
     { name="BaturinMaksim188", email="Baturinmaksim188@gmail.com"},
 ]
-description = "For now test description"
+description = "SDK that simplifies work with outsourcing"
 readme = "README.md"
 dependencies = [
     'requests',
