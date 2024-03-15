@@ -11,7 +11,11 @@ class Client(Base):
         super().__init__(region, domain, access_key)
 
     @catch
-    def get_arm_employees(self, db_name, headers=None):
+    def get_databases(self, headers=None):
+        return requests.get(url=cfg.ONE_S_DATABASES.format(domain=self.domain), headers=headers).json()
+
+    @catch
+    def get_db_employees(self, db_name, headers=None):
         return requests.get(url=cfg.ARM_EMPLOYEES.format(domain=self.domain, db_name=db_name), headers=headers).json()
 
     @catch
