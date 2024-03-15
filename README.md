@@ -1,7 +1,5 @@
 # <font color="#3498DB">Sanau Automation SDK</font>
 
----
-
 This is **package for python** that you can install by:  
 ```pip install SanauAutomationSDK```
 
@@ -58,6 +56,6 @@ And each of these classes has functions for working with APIs specific to them
 
 > **<font color="#85C1E9">OGD</font> class** provides work with OGD
 
-| Method          | Explanation       |
-|-----------------|-------------------|
-| get_ogd_excel() | gets excel of ogd |
+| Method              | Explanation       |
+|---------------------|-------------------|
+| ``get_ogd_excel()`` | gets excel of ogd |
