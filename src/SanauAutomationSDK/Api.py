@@ -1,8 +1,8 @@
-from Base import Base
+from .Base import Base
+from . import config as cfg
+from .utils.decorators import catch
 import requests
 import urllib.request
-import config as cfg
-from utils.decorators import catch
 
 
 class Api(Base):

@@ -1,8 +1,8 @@
-from Base import Base
+from .Base import Base
+from . import config as cfg
+from .utils.decorators import catch
 import requests
-import config as cfg
 import json
-from utils.decorators import catch
 
 
 class Client(Base):

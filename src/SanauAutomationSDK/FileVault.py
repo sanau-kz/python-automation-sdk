@@ -1,7 +1,7 @@
-from Base import Base
-from utils.decorators import catch
+from .Base import Base
+from . import config as cfg
+from .utils.decorators import catch
 import requests
-import config as cfg
 
 
 class FileVault(Base):

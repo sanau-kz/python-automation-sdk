@@ -1,8 +1,8 @@
-from Base import Base
-from Api import Api
-from Client import Client
-from FileVault import FileVault
-from OGD import OGD
+from .Base import Base
+from .Api import Api
+from .Client import Client
+from .FileVault import FileVault
+from .OGD import OGD
 
 
 class SanauAutomationSDK(Base):
