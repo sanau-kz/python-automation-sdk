@@ -19,13 +19,17 @@ class Client(Base):
         return requests.get(url=cfg.ARM_EMPLOYEES.format(domain=self.domain, db_name=db_name), headers=headers).json()
 
     @catch
-    def post_alerts(self, params, headers=None):
-        return requests.post(url=cfg.ALERTS.format(domain=self.domain), params=params, headers=headers)
-
-    @catch
     def post_taxation_organ(self, out_dict, headers=None):
         return requests.post(url=cfg.FETCH_TAXATION_ORGANS.format(domain=self.domain),
                              data=json.dumps({'taxation_organs': out_dict}), headers=headers)
+
+    @catch
+    def get_alert(self, params, headers=None):
+        return requests.get(cfg.GET_ALERT.format(domain=self.domain), params=params, headers=headers)
+
+    @catch
+    def post_alerts(self, params, headers=None):
+        return requests.post(url=cfg.POST_ALERTS.format(domain=self.domain), params=params, headers=headers)
 
     @catch
     def resolve_alert(self, params, headers=None):
