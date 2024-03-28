@@ -11,7 +11,7 @@ class Api(Base):
         super().__init__(region, domain, access_key)
 
     @catch
-    def get_currency_rates(self, currency_date):
+    def get_currency_rates(self, currency_date, headers=None):
         return urllib.request.urlopen(url=cfg.NATIONAL_BANK.format(currency_date=currency_date))
 
     @catch
