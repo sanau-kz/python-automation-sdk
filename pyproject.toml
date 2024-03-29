@@ -7,7 +7,7 @@ packages = ["src/SanauAutomationSDK/"]
 
 [project]
 name = "SanauAutomationSDK"
-version = "1.0.7"
+version = "1.0.8"
 authors = [
     { name="victor.ten", email="prostobackoffice@gmail.com" },
     { name="NotFakeL1eN", email="notfakel1en@gmail.com" },

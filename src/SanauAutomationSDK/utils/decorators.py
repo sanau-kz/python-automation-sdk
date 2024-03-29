@@ -13,15 +13,14 @@ def catch(retries=10, delay=10):
             for attempt in range(retries):
                 try:
                     return func(*args, **kwargs)
-                except (requests.ConnectionError, requests.Timeout, json.JSONDecodeError) as e:
-                    if attempt >= retries-1:
-                        if isinstance(e, json.JSONDecodeError):
-                            raise json.JSONDecodeError('JSONDecoderError! The server may be down', e.doc, e.pos) from None
-                        raise e from None
-                    time.sleep(delay)
                 except Exception as e:
-                    raise e from None
+                    if attempt == retries-1:
+                        if isinstance(e, json.JSONDecodeError):
+                            raise json.JSONDecodeError(f'JSONDecoderError {e.msg}') from None
+                        raise e from None
+                time.sleep(delay)
 
         return wrapper
 
     return decorator
+
