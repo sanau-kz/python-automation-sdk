@@ -9,6 +9,6 @@ class Oked(Base):
     def __init__(self, region, domain, access_key):
         super().__init__(region, domain, access_key)
 
-    @catch
+    @catch()
     def get_all_okeds(self, headers=None):
         return requests.get(url=cfg.OKEDS.format(domain=self.domain), headers=headers).json()
