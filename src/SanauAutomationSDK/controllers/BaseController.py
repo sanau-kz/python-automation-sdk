@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import json
 
 
 class BaseController:
@@ -25,14 +26,36 @@ class BaseController:
         return result if result else None
 
     def get_by(self, **kwargs):
-        result = self.model.raw(f"SELECT * FROM {self.model._meta.table_name} WHERE {'AND '.join([f'{k}=`{v}`' for k, v in kwargs.items()])} ORDER BY created_at DESC").execute()
+        condition_text = ''
+        for i, (k, v) in enumerate(kwargs.items()):
+            if isinstance(v, list):
+                condition_text += '( ' + 'OR '.join([f"{k}='{list_item}' " for list_item in v]) + ') '
+            else:
+                condition_text += f"{k}='{v}' "
+            if len(kwargs.keys()) > i + 1:
+                condition_text += 'AND '
+
+        result = self.model.raw(f'''SELECT * FROM {self.model._meta.table_name} WHERE {condition_text} ORDER BY created_at DESC''').execute()
         return result if result else None
 
     def create(self, **kwargs):
-        return self.model.raw(f"INSERT INTO {self.model._meta.table_name} ({', '.join([k for k in kwargs.keys()])}) VALUES ({', '.join([v for v in kwargs.values()])})")
+        model_defaults = self.model._meta.defaults
+        for k, v in model_defaults.items():
+            if k.name == 'created_at' or k.name == 'updated_at':
+                if k.name not in kwargs:
+                    kwargs[k.name] = datetime.now(timezone.utc)
+            else:
+                if k.name not in kwargs:
+                    kwargs[k.name] = v
+
+        for k, v in kwargs.items():
+            if isinstance(v, dict):
+                kwargs[k] = json.dumps(v)
+        # TODO: сделать возврат объекта модели после его создания
+        return self.model.raw(f'''INSERT INTO {self.model._meta.table_name} ({", ".join([k for k in kwargs.keys()])}) VALUES ({", ".join([f"'{v}'" for v in kwargs.values()])})''').execute()
 
     def update(self, **kwargs):
-        all_model_fields = (field for field in self.model._meta.fields)
+        all_model_fields = [field for field in self.model._meta.fields]
 
         if 'id' not in kwargs:
             raise ValueError('id is required')
@@ -40,15 +63,13 @@ class BaseController:
         for k, v in kwargs.items():
             if k not in all_model_fields:
                 raise ValueError(f'{k} is not a valid field')
+            if isinstance(v, dict):
+                kwargs[k] = json.dumps(v)
 
-        item = self.get_by_id(kwargs['id'])
-        fields_to_update = {attr_name: getattr(item, attr_name) for attr_name in item._meta.sorted_field_names}
+        kwargs['updated_at'] = datetime.now(timezone.utc)
 
-        for k in kwargs.keys():
-            fields_to_update[k] = kwargs[k]
-        fields_to_update['updated_at'] = datetime.now(timezone.utc)
-
-        return self.model.raw(f"UPDATE {self.model._meta.table_name} SET {', '.join([f'{k} = `{v}`' for k, v in fields_to_update.items()])} WHERE id = {kwargs['id']}").execute()
+        self.model.raw(f'''UPDATE {self.model._meta.table_name} SET {", ".join([f"{k} = '{v}'" for k, v in kwargs.items()])} WHERE id = {kwargs['id']}''').execute()
+        return self.get_by_id(kwargs['id'])
 
     def delete(self, item_id):
         self.model.raw(f"DELETE FROM {self.model._meta.table_name} WHERE id = {item_id}").execute()

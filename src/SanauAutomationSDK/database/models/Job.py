@@ -25,5 +25,6 @@ class Job(BaseModel):
     created_at = DateTimeField(default=datetime.now(timezone.utc))
     updated_at = DateTimeField(default=datetime.now(timezone.utc))
     started_at = DateTimeField(null=True)
-    completed_at = DateTimeField(null=True)
     start_at = DateTimeField(null=True, default=datetime.now(timezone.utc))
+    completed_at = DateTimeField(null=True)
+

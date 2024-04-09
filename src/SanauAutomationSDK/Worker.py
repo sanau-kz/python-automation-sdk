@@ -1,7 +1,12 @@
 from .database.DB import DB
+
 from .database.models.Job import Job
+
 from .controllers.TestsController import TestsController
+from .controllers.JobsController import JobsController
+
 from datetime import datetime
+import json
 
 
 class Worker:
