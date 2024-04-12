@@ -1,5 +1,5 @@
-from playhouse.postgres_ext import *
 from src.SanauAutomationSDK.database.migrations.Migrations import Migrations
+from playhouse.postgres_ext import *
 
 
 class DB:
