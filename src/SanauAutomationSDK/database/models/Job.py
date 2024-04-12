@@ -1,6 +1,6 @@
-from playhouse.postgres_ext import *
 from .BaseModel import BaseModel
-from datetime import datetime,  timezone
+from playhouse.postgres_ext import *
+from datetime import datetime, timezone
 
 
 class Job(BaseModel):

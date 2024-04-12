@@ -73,7 +73,7 @@ class BaseController:
             update_data[k] = json.dumps(v) if isinstance(v, dict) else v
 
         if self.model.raw(f'''UPDATE {self.model._meta.table_name} SET {", ".join([f"{k} = '{update_data[k]}'" for k, v in kwargs.items()])} WHERE {where_clause}''').execute() == 0:
-            raise ValueError('No entries found.')
+            return None
         return self.get_or_none(id=id_value)
 
     def delete(self, item_id):

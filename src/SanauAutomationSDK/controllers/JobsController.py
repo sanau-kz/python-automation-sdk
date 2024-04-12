@@ -112,16 +112,13 @@ class JobsController(BaseController):
         return True
 
     def check_for_existing_job(self, job_id):
-        try:
-            start = self.update(id=job_id,
-                                status='started',
-                                _where={'status': 'pending'},
-                                )
-            if start == 0:
-                return False
-            return True
-        except ValueError:
+        start = self.update(id=job_id,
+                            status='started',
+                            _where={'status': 'pending'},
+                            )
+        if not start:
             return False
+        return True
 
     def check_last_job(self, job):
         try:

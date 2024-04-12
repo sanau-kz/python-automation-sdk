@@ -18,16 +18,20 @@ class Worker:
             self.fetch_and_run_pending_job()
 
     def fetch_and_run_pending_job(self):
+        # Gets the most top pending job
         selected_job_id = self.jobs_controller.get_last_job_id()
 
-        if selected_job_id is None:
+        if selected_job_id is not None:
             return False
-        job = Job.get(selected_job_id)
+        job = self.jobs_controller.get_or_none(id=selected_job_id)
 
-        if not self.jobs_controller.check_required_jobs(job):
-            return False
-
+        # Checks if the job is already running
         if not self.jobs_controller.check_for_existing_job(job):
             return False
 
+        # Checks if the job has required jobs
+        if not self.jobs_controller.check_required_jobs(job):
+            return False
+
+        # Starts the job
         self.jobs_controller.execute_job(job)

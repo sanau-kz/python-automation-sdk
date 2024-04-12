@@ -1,5 +1,6 @@
-from playhouse.postgres_ext import *
 from .BaseModel import BaseModel
+from playhouse.postgres_ext import *
+from datetime import datetime, timezone
 
 
 class Database(BaseModel):
@@ -16,3 +17,4 @@ class Database(BaseModel):
     server = CharField()
     entity_id = IntegerField()
     sync_period = IntervalField()
+    created_at = DateTimeField(default=datetime.now(timezone.utc))
