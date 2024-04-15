@@ -24,6 +24,7 @@ class JobsController(BaseController):
 
             job.completed_at = datetime.utcnow()
             job.status = 'completed'
+            job.save()
             # TODO Сделать логгер
             # logger.info(f'Job {job.id} - {job.task} completed!')
 
@@ -82,9 +83,9 @@ class JobsController(BaseController):
         self.update(id=job_id, summary=summary)
 
     def get_last_job_id(self):
-        query = self.get_or_none(status='pending', sorting_policy=('priority', 'asc'))
+        query = self.get_all(status='pending', sorting_policy=('priority', 'asc'))
         selected_job_id = None
-        if query.exists():
+        if query:
             for job in query:
                 if self.get_or_none(status=['pending', 'started'],
                                     database_id=job.database_id,
@@ -102,37 +103,49 @@ class JobsController(BaseController):
                                     database_id=job.database_id,
                                     task=('IN', required_jobs),
                                     created_at=('DATE', job.created_at))
-        if len(related_jobs) > 0:
-            name = 'Пропуск'
-            status = 'failed'
-            message = f"Не были выполнены обязательные джобы ({', '.join(job.name for job in related_jobs)})."
-            self.update_summary(job_id=job.id, name=name, status=status, message=message, )
-            self.check_last_job(job)
-            return False
-        return True
+
+        if related_jobs is None:
+            return True
+
+        name = 'Пропуск'
+        status = 'failed'
+        message = f"Не были выполнены обязательные джобы ({', '.join(job.name for job in related_jobs)})."
+        self.update_summary(job_id=job.id, name=name, status=status, message=message, )
+        self.check_last_job(job)
+
+        return False
 
     def check_for_existing_job(self, job_id):
         start = self.update(id=job_id,
                             status='started',
                             _where={'status': 'pending'},
                             )
-        if not start:
-            return False
-        return True
+
+        return True if start else False
 
     def check_last_job(self, job):
-        try:
-            unfinished_jobs = self.model.get_all(status='pending',
-                                                 database_id=job.database_id,
-                                                 created_at=('DATE', job.created_at.date()))
-            if len(unfinished_jobs) > 0:
-                return False
-        except self.model.DoesNotExist:
-            failed_jobs_names = [_.name for _ in self.model.get_all(status='failed',
-                                                                    database_id=job.database_id,
-                                                                    created_at=('DATE', job.created_at.date()))]
+        completed_jobs = self.get_all(status='completed',
+                                      database_id=job.database_id,
+                                      created_at=('DATE', job.created_at.date()))
+        if completed_jobs is None:
+            print("Начало дня!")
+            # TODO Сделать резолв алерта
+            # get_db(job.database_id).resolve_alert(key="ones:database:validation:not_successful_alerts")
+
+        unfinished_jobs = self.get_all(status='pending',
+                                       database_id=job.database_id,
+                                       created_at=('DATE', job.created_at.date()))
+
+        if unfinished_jobs is None:
+            failed_jobs = self.model.get_all(status='failed',
+                                             database_id=job.database_id,
+                                             created_at=('DATE', job.created_at.date()))
+            failed_jobs_names = []
+            if failed_jobs is not None:
+                failed_jobs_names = [failed_job.name for failed_job in failed_jobs]
             if job.status == 'failed':
                 failed_jobs_names.append(job.name)
+
             if len(failed_jobs_names) > 0:
                 message = ', '.join(failed_jobs_names)
                 print(f"Не прошли следующие проверки: {message}")
@@ -146,10 +159,5 @@ class JobsController(BaseController):
                 return True
                 # TODO Сделать резолв алерта
                 # get_db(job.database_id).resolve_alert(key="ones:database:validation:not_successful_alerts")
-        finally:
-            if len(self.model.get_all(status='completed',
-                                      database_id=job.database_id,
-                                      created_at=('DATE', job.created_at.date()))) == 0:
-                print("Начало дня!")
-                # TODO Сделать резолв алерта
-                # get_db(job.database_id).resolve_alert(key="ones:database:validation:not_successful_alerts")
+        else:
+            return False

@@ -1,5 +1,4 @@
-class Base:
-
+class OneS:
     def __init__(self, region, domain, access_key):
         self.region = region
         self.domain = domain

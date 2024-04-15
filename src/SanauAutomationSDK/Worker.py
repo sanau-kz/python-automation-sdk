@@ -1,8 +1,7 @@
 import time
 from datetime import datetime
 from .database.DB import *
-from .database.models.Job import Job
-from controllers.JobsController import JobsController
+from .controllers.JobsController import JobsController
 
 
 class Worker:
@@ -21,7 +20,7 @@ class Worker:
         # Gets the most top pending job
         selected_job_id = self.jobs_controller.get_last_job_id()
 
-        if selected_job_id is not None:
+        if selected_job_id is None:
             return False
         job = self.jobs_controller.get_or_none(id=selected_job_id)
 

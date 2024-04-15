@@ -33,6 +33,8 @@ class BaseController:
                 if v[0] == 'DATE':
                     condition_text += f"DATE({k})='{v[1]}' "
                 elif v[0] == 'IN':
+                    if not len(v[1]):
+                        continue
                     in_list = ', '.join([f"'{item}'" for item in v[1]])
                     condition_text += f"{k} IN ({in_list}) "
                 elif v[0] in ['<', '>', '=', '<=', '>=', '<>']:
@@ -51,10 +53,7 @@ class BaseController:
 
     def get_all(self, **kwargs):
         result = self._get_by(**kwargs)
-        if result:
-            return result
-        else:
-            raise self.model.DoesNotExist(f"No entries found.")
+        return result if result else None
 
     def update(self, **kwargs):
         if 'id' not in kwargs:
@@ -64,7 +63,7 @@ class BaseController:
         where = kwargs.pop('_where', None)
         if where is not None and not isinstance(where, dict):
             raise ValueError("_where must be a dictionary")
-        where_clause = f"id = {id_value}" if where is None else " AND ".join([f"{k} = {v}" for k, v in where.items()])
+        where_clause = f"id = '{id_value}'" if where is None else " AND ".join([f"{k} = '{v}'" for k, v in where.items()])
         update_data = {'updated_at': datetime.now(timezone.utc)} if 'updated_at' in all_fields else {}
 
         for k, v in kwargs.items():
