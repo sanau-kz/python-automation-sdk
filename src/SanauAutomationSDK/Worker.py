@@ -1,13 +1,24 @@
-import time
-from datetime import datetime
 from .database.DB import *
+from .classes.DatabaseCredentials import DatabaseCredentials
+from .classes.ApiCredentials import ApiCredentials
+
 from .controllers.JobsController import JobsController
+
+from datetime import datetime
+import time
 
 
 class Worker:
 
-    def __init__(self, db_name, user, password, host, port):
-        self.db = DB(db_name, user=user, password=password, host=host, port=port).db
+    def __init__(self, database_credentials: DatabaseCredentials, api_credentials: ApiCredentials):
+        self.db = DB(
+            database_credentials.name,
+            user=database_credentials.user,
+            password=database_credentials.password,
+            host=database_credentials.host,
+            port=database_credentials.port
+        ).db
+
         self.jobs_controller = JobsController(self.db)
 
     def run(self):

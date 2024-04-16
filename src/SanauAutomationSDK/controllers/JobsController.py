@@ -1,6 +1,9 @@
 from .BaseController import BaseController
 from ..database.models.Job import Job
+from ..utils.logutils import logger
+
 from datetime import datetime, timezone
+
 import json
 import os
 
@@ -12,8 +15,7 @@ class JobsController(BaseController):
 
     def execute_job(self, job):
         try:
-            # TODO Сделать логгер
-            # logger.info(f'Starting job {job.id} - {job.task}! Wish me luck!')
+            logger.info(f'Starting job {job.id} - {job.task}! Wish me luck!')
             job.status = 'started'
             job.summary = '{}'
             job.started_at = datetime.now(timezone.utc)
@@ -25,22 +27,18 @@ class JobsController(BaseController):
             job.completed_at = datetime.utcnow()
             job.status = 'completed'
             job.save()
-            # TODO Сделать логгер
-            # logger.info(f'Job {job.id} - {job.task} completed!')
+            logger.info(f'Job {job.id} - {job.task} completed!')
 
         except Exception as e:
-            # TODO Сделать логгер
-            # logger.info(f'Ehhhh! {e}')
+            logger.info(f'Ehhhh! {e}')
             self.update_summary(job_id=job.id, name='Ошибка!', status='failed', message=str(e))
 
             if (7 <= datetime.now().hour <= 18) or job.tries >= 10:
-                # TODO Сделать логгер
-                # logger.info(f'Im done :(')
+                logger.info(f'Im done :(')
                 job.status = 'failed'
                 job.completed_at = datetime.utcnow()
             else:
-                # TODO Сделать логгер
-                # logger.info(f'I will try again later!')
+                logger.info(f'I will try again later!')
                 job.status = 'pending'
             job.save()
 
