@@ -1,6 +1,7 @@
-from src.SanauAutomationSDK.api.Wrapper import Wrapper
-from src.SanauAutomationSDK.utils.logutils import logger
-from src.SanauAutomationSDK.api.models.Task import Task
+from ...Wrapper import Wrapper
+from ..models.Task import Task
+from ....utils.logutils import logger
+
 
 import yaml
 

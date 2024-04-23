@@ -7,8 +7,3 @@ class Alert:
         self.model_key = model_key
         self.model_severity = model_severity
         self.model_resolvable = model_resolvable
-        self.params = {'model_class': self.model_class,
-                       'model_id': self.model_id,
-                       'model_key': self.model_key,
-                       'model_severity': self.model_severity,
-                       'model_resolvable': self.model_resolvable}

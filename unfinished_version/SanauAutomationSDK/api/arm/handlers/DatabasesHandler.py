@@ -1,5 +1,5 @@
-from src.SanauAutomationSDK.api.Wrapper import Wrapper
-from src.SanauAutomationSDK.utils.logutils import logger
+from ...Wrapper import Wrapper
+from ....utils.logutils import logger
 
 
 class DatabasesHandler:

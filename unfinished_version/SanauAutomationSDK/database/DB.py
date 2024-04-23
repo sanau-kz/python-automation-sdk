@@ -7,7 +7,6 @@ class DB:
     def __init__(self, db_name, user, password, host, port):
         self.db = PostgresqlExtDatabase(db_name, user=user, password=password, host=host, port=port)
         self.db.connect()
-        self.create_missing_tables()
 
     def close_connection(self):
         self.db.close()

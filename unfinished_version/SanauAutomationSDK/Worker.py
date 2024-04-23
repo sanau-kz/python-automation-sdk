@@ -1,6 +1,7 @@
-from .api.Wrapper import Wrapper
-from .controllers.JobsController import JobsController
 from .classes.ArmApiCredentials import ArmApiCredentials
+
+from .controllers.JobsController import JobsController
+from .api.Wrapper import Wrapper
 
 from typing import Callable
 import time
