@@ -92,7 +92,7 @@ class Arm:
 
     @catch()
     def get_file(self, params, headers=None):
-        return requests.get(url=cfg.FILE_VAULT_DOWNLOAD_FILE.format(domain=self.domain), params=params, headers=headers)
+        return requests.get(url=cfg.FILE_VAULT_DOWNLOAD_FILE.format(domain_first_part=self.domain.split('.')[0]), params=params, headers=headers)
 
 
     #################### OGD apis ####################
