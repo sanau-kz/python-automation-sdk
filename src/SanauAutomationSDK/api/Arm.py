@@ -91,8 +91,8 @@ class Arm:
     #################### FileVault apis ####################
 
     @catch()
-    def get_file(self, params, headers=None):
-        return requests.get(url=cfg.FILE_VAULT_DOWNLOAD_FILE.format(domain_first_part=self.domain.split('.')[0]), params=params, headers=headers)
+    def get_filevault_file(self, params, headers=None):
+        return requests.get(url=cfg.FILEVAULT_DOWNLOAD_FILE.format(domain_first_part=self.domain.split('.')[0]), params=params, headers=headers)
 
 
     #################### OGD apis ####################
