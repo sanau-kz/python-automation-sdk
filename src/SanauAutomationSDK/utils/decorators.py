@@ -2,7 +2,7 @@ import json
 import time
 
 
-def catch(retries=10, delay=10):
+def catch(retries=3, delay=10):
     def decorator(func):
         def wrapper(*args, **kwargs):
             self = args[0]
